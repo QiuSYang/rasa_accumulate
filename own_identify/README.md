@@ -7,5 +7,8 @@ rasa 项目说明：
                     USER：我是杨球松(intent: inform, entity: 杨球松)
                     AI: 请您说出开门密码？
                     USER：1234(intent: inform, entity: 1234)
+                    AI：主人，请进！(action_restart, 标志对话结束)
+    3. 异常处理：A. user intent 为 bye，thanks，AI：直接回复bye
+                B. user intent 为 chat, AI: 直接回复上一次AI的问题，两次以上直接see you
                     
     

@@ -1,0 +1,4 @@
+language: zh
+
+policies:
+  - name: policies.self_rule_policy.SelfRulePolicy

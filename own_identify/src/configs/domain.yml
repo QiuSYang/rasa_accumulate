@@ -1,0 +1,39 @@
+slots:
+  name:
+    type: text
+  password:
+    type: text
+  is_own:
+    type: float
+  is_valid_password:
+    type: float
+
+entities:
+- name
+- password
+
+intents:
+ - greet
+ - inform
+ - thanks
+ - bye
+ - chat
+
+responses:
+  utter_greet:
+    - text: "您好呀！"
+  utter_bye:
+    - text: "再会！"
+  utter_chat:
+    - text: "不好意思，不能理解刚刚您表达的意思。"
+  utter_ask_own_name:
+    - text: "请说一下您的名字。"
+  utter_ask_setting_password:
+    - text: "请说一下您设置的密码。"
+
+actions:
+  - utter_greet
+  - utter_bye
+  - utter_chat
+  - utter_ask_own_name
+  - utter_ask_setting_password
