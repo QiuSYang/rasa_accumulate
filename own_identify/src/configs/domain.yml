@@ -4,9 +4,9 @@ slots:
   password:
     type: text
   is_own:
-    type: float
+    type: bool
   is_valid_password:
-    type: float
+    type: bool
 
 entities:
 - name
