@@ -24,10 +24,35 @@ class SelfRulePolicy(Policy):
 
         super().__init__(priority=priority)
 
+    @staticmethod
+    def _default_predictions(domain: Domain) -> List[float]:
+        """Creates a list of zeros.
+
+        Args:
+            domain: the :class:`rasa.core.domain.Domain`
+        Returns:
+            the list of the length of the number of actions
+        """
+
+        return [0.0] * domain.num_actions
+
+    def train(
+            self,
+            training_trackers: List[DialogueStateTracker],
+            domain: Domain,
+            **kwargs: Any,
+    ) -> None:
+        """Does nothing. This policy is deterministic."""
+
+        pass
+
     def predict_action_probabilities(
             self, tracker: DialogueStateTracker, domain: Domain
     ) -> List[float]:
         """Predicts the assigned action."""
+
+        prediction = self._default_predictions(domain)
+        pass
 
     def persist(self, path: Text) -> None:
         """Only persists the priority."""
