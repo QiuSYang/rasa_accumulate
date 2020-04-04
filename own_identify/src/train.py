@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 class RasaTrainTrial(object):
     def __init__(self, domainFile='configs/domain.yml',
                  configFile='configs/config.yml',
-                 modelSavePath='models/core',
+                 modelSavePath='models/',
                  storiesFile='data/stories.md',
                  augmentationFactor=0):
         self.domainFile = domainFile
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                         default="data/stories.md",
                         type=str, help="trial stories数据.")
     parser.add_argument("--modelSavePath", dest="modelSavePath",
-                        default="models/core",
+                        default="models/",
                         type=str, help="model保存路径.")
     parser.add_argument("--augmentationFactor", dest="augmentationFactor",
                         default=0,

@@ -25,7 +25,7 @@
   "policy_names": [
     "policies.self_rule_policy.SelfRulePolicy"
   ],
-  "trained_at": "20200404-174604",
+  "trained_at": "20200404-184338",
   "rasa": "1.6.2",
   "tensorflow": "1.15.0",
   "sklearn": "0.20.4"

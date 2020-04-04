@@ -10,5 +10,12 @@ rasa 项目说明：适用rasa 1.6.0
                     AI：主人，请进！(action_restart, 标志对话结束)
     3. 异常处理：A. user intent 为 bye，thanks，AI：直接回复bye
                 B. user intent 为 chat, AI: 直接回复上一次AI的问题，两次以上直接see you
+                
+                
+训练与测试：
+    1. 训练：默认 cd own_identify/src 执行 python train.py 
+            具体参数查看: python train.py --help 
+    2. 预测：默认 cd own_identify/src 执行 python inference.py 
+            具体参数查看: python inference.py --help 
                     
     
