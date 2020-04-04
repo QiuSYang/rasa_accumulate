@@ -15,7 +15,7 @@ rasa 项目说明：适用rasa 1.6.0
 训练与测试：
     1. 训练：默认 cd own_identify/src 执行 python train.py 
             具体参数查看: python train.py --help 
-    2. 预测：默认 cd own_identify/src 执行 python inference.py 
+    2. 预测：默认 cd own_identify/src 执行 1. rasa run actions 2. python inference.py 
             具体参数查看: python inference.py --help 
                     
     

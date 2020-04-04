@@ -163,11 +163,11 @@ class SelfRulePolicy(Policy):
                     # 第一步，匹配姓名
                     if tracker.latest_action_name == ACTION_LISTEN_NAME:
                         action = 'action_match_name'
-                    elif not tracker.get_slot('is_own'):
-                        action = 'utter_own_name_error'
-                    else:
+                    elif tracker.latest_action_name == "utter_own_name_error":
                         # 只要有agent的utter，都将进入agent监状态
                         action = ACTION_LISTEN_NAME
+                    elif not tracker.get_slot('is_own'):
+                        action = 'utter_own_name_error'
             else:
                 if tracker.latest_action_name == ACTION_LISTEN_NAME:
                     # 没有收集到任何实体信息，重新追问上一个问题

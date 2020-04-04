@@ -40,6 +40,9 @@ if __name__ == "__main__":
                         type=str, help="model保存路径.")
     args = parser.parse_args()
 
+    # 启动actions服务
+    # os.system('start /b rasa run actions')
+
     pt = RasaInferenceTrial(model_path=args.modelSavePath)
     _logger.info('load rasa core model.')
     pt.load_model()
@@ -48,7 +51,7 @@ if __name__ == "__main__":
     loop = asyncio.get_event_loop()
     index = 1
     dialogue_id = "dialogue_{}".format(str(index))
-    nlu_info = {"intent": None, "entities": None}
+    nlu_info = {"intent": None, "entities": []}
     while True:
         # 开始每轮对话，第一轮NLU输入为空，获取开头语“utter_ask_own_name”
         print("User response: {}".format(nlu_info))
@@ -68,7 +71,7 @@ if __name__ == "__main__":
         elif msg == 'restart':
             index += 1
             dialogue_id = "dialogue_{}".format(str(index))
-            nlu_info = {"intent": None, "entities": None}
+            nlu_info = {"intent": None, "entities": []}
 
         # 解析输入的字符串变为Dict
         input_dict = json.loads(msg)
