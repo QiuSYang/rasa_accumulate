@@ -1,0 +1,73 @@
+actions:
+- action_match_name
+- action_match_password
+- utter_ask_own_name
+- utter_ask_setting_password
+- utter_bye
+- utter_chat
+- utter_greet
+- utter_own_name_error
+- utter_password_error
+- utter_validation_pass
+- utter_welcome
+config:
+  store_entities_as_slots: true
+entities:
+- name
+- password
+forms: []
+intents:
+- greet:
+    ignore_entities: []
+    use_entities: true
+- thanks:
+    ignore_entities: []
+    use_entities: true
+- bye:
+    ignore_entities: []
+    use_entities: true
+- chat:
+    ignore_entities: []
+    use_entities: true
+- inform:
+    ignore_entities: []
+    use_entities: true
+session_config:
+  carry_over_slots_to_new_session: true
+  session_expiration_time: 0
+slots:
+  is_own:
+    auto_fill: true
+    initial_value: null
+    type: rasa.core.slots.BooleanSlot
+  is_valid_password:
+    auto_fill: true
+    initial_value: null
+    type: rasa.core.slots.BooleanSlot
+  name:
+    auto_fill: true
+    initial_value: null
+    type: rasa.core.slots.TextSlot
+  password:
+    auto_fill: true
+    initial_value: null
+    type: rasa.core.slots.TextSlot
+templates:
+  utter_ask_own_name:
+  - text: 请说一下您的名字。
+  utter_ask_setting_password:
+  - text: 请说一下您设置的密码。
+  utter_bye:
+  - text: 再见！
+  utter_chat:
+  - text: 不好意思，不能理解刚刚您表达的意思。
+  utter_greet:
+  - text: 您好呀！
+  utter_own_name_error:
+  - text: 请不要私闯民宅，请您马上离开。
+  utter_password_error:
+  - text: 请不要冒充{name}, 请您马上离开。
+  utter_validation_pass:
+  - text: '{name}欢迎回家。'
+  utter_welcome:
+  - text: 不客气！

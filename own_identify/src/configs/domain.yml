@@ -19,7 +19,7 @@ intents:
  - chat
  - inform
 
-responses:
+templates:
   utter_greet:
     - text: "您好呀！"
   utter_bye:

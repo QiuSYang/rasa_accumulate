@@ -1,0 +1,32 @@
+{
+  "action_fingerprints": {
+    "action_listen": {
+      "slots": [
+        "name",
+        "password"
+      ]
+    },
+    "action_match_name": {
+      "slots": [
+        "is_own"
+      ]
+    },
+    "action_match_password": {
+      "slots": [
+        "is_valid_password"
+      ]
+    }
+  },
+  "python": "3.6.10",
+  "max_histories": [
+    5
+  ],
+  "ensemble_name": "rasa.core.policies.ensemble.SimplePolicyEnsemble",
+  "policy_names": [
+    "policies.self_rule_policy.SelfRulePolicy"
+  ],
+  "trained_at": "20200404-174604",
+  "rasa": "1.6.2",
+  "tensorflow": "1.15.0",
+  "sklearn": "0.20.4"
+}
