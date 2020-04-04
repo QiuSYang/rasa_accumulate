@@ -14,26 +14,41 @@ entities:
 
 intents:
  - greet
- - inform
  - thanks
  - bye
  - chat
+ - inform
 
 responses:
   utter_greet:
     - text: "您好呀！"
   utter_bye:
-    - text: "再会！"
+    - text: "再见！"
+  utter_welcome:
+    - text: "不客气！"
   utter_chat:
     - text: "不好意思，不能理解刚刚您表达的意思。"
   utter_ask_own_name:
     - text: "请说一下您的名字。"
+  utter_own_name_error:
+    - text: "请不要私闯民宅，请您马上离开。"
   utter_ask_setting_password:
     - text: "请说一下您设置的密码。"
+  utter_password_error:
+    - text: "请不要冒充{name}, 请您马上离开。"
+  utter_validation_pass:
+    - text: "{name}欢迎回家。"
 
 actions:
   - utter_greet
   - utter_bye
+  - utter_welcome
   - utter_chat
   - utter_ask_own_name
+  - utter_own_name_error
   - utter_ask_setting_password
+  - utter_password_error
+  - utter_validation_pass
+
+  - action_match_name
+  - action_match_password
