@@ -11,7 +11,7 @@ _logger = logging.getLogger(__name__)
 
 class ActionMatchName(Action):
     """匹配 own 姓名是否正确"""
-    own_name = '杨球松'
+    own_name = '孙悟空'
 
     def name(self):  # type: () -> Text
         return 'action_match_name'
@@ -51,7 +51,7 @@ class ActionMatchPassword(Action):
         slots = []
 
         if tracker.get_slot('password'):
-            if tracker.get_slot('password') == self.own_name:
+            if tracker.get_slot('password') == self.own_password:
                 slots.append(SlotSet('is_valid_password', True))
                 # 执行开门指令
                 _logger.info("open the door.")

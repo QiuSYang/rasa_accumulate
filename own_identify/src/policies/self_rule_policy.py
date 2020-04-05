@@ -77,16 +77,18 @@ class SelfRulePolicy(Policy):
             if self.chat_num == 0:
                 if tracker.latest_action_name == ACTION_LISTEN_NAME:
                     action = 'utter_greet'
-                    # 闲聊计数
-                    self.chat_num += 1
                 elif tracker.latest_action_name == 'utter_greet':
-                    # 镜像表达问候之后，追问之前问题
+                    # 镜像表达问候之后，
+                    # 第一次表达greet，追问之前的问题
                     action = self.latest_agent_ask_utter
                 else:
+                    # 这一轮闲聊结束，进入用户监听模式
                     # 追问之后就应该agent就应该去监听用户的回答
                     action = ACTION_LISTEN_NAME
                     # 更新最新的询问, 其实不需要更新，继续保持原样就好
                     self.latest_agent_ask_utter = self.latest_agent_ask_utter
+                    # 闲聊计数，一轮闲聊结束
+                    self.chat_num += 1
             else:
                 # 不予许闲聊两次，greet也算一种chat
                 if tracker.latest_action_name == ACTION_LISTEN_NAME:
@@ -113,12 +115,15 @@ class SelfRulePolicy(Policy):
             if self.chat_num == 0:
                 if tracker.latest_action_name == ACTION_LISTEN_NAME:
                     action = 'utter_chat'
-                    self.chat_num += 1
                 elif tracker.latest_action_name == 'utter_chat':
-                    # 追问前一个agent的提问
+                    # 第一次表达chaet之意，追问前一个agent的提问
                     action = self.latest_agent_ask_utter
                 else:
+                    # 此轮闲聊结束，进入用户监听状态
                     action = ACTION_LISTEN_NAME
+                    self.latest_agent_ask_utter = self.latest_agent_ask_utter
+                    # 闲聊计数
+                    self.chat_num += 1
             else:
                 if tracker.latest_action_name == ACTION_LISTEN_NAME:
                     action = 'utter_chat'

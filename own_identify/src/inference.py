@@ -72,8 +72,14 @@ if __name__ == "__main__":
             index += 1
             dialogue_id = "dialogue_{}".format(str(index))
             nlu_info = {"intent": None, "entities": []}
+            msg = input().strip()
 
         # 解析输入的字符串变为Dict
         input_dict = json.loads(msg)
         nlu_info['intent'] = input_dict.get('intent')
-        nlu_info['entities'] = input_dict.get('entities')
+        if input_dict.get('entities'):
+            nlu_info['entities'] = input_dict.get('entities')
+        else:
+            # 缺少'entities'字段，将其赋值为[](空列表)
+            nlu_info['entities'] = []
+
