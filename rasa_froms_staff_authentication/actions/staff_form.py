@@ -69,7 +69,7 @@ class StaffForm(FormAction):
             return {"self_name": value}
         else:
             if tracker.get_slot("staff_name_error_count") < 1:
-                dispatcher.utter_message(template="utter_wrong_staff_name")
+                dispatcher.utter_message(template="utter_wrong_self_name")
                 # validation failed, set this slot to None, meaning the
                 # user will be asked for the slot again
 
@@ -80,6 +80,7 @@ class StaffForm(FormAction):
                 dispatcher.utter_message(template="utter_manual_service")
 
                 # 中断form
+                print("中断 form loop")
                 return self.deactivate()
 
     def validate_digits_key(
@@ -98,13 +99,14 @@ class StaffForm(FormAction):
                 # validation failed, set this slot to None, meaning the
                 # user will be asked for the slot again
 
-                return {"self_name": None,
+                return {"digits_key": None,
                         "digits_key_error_count": tracker.get_slot("digits_key_error_count") + 1}
             else:
                 # 呼叫前台
                 dispatcher.utter_message(template="utter_manual_service")
 
                 # 中断form
+                print("中断 form loop")
                 return self.deactivate()
 
     def match_staff_name(self, staff_name):
