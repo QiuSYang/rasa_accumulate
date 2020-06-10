@@ -1,0 +1,65 @@
+intents:
+  - greet
+  - confirm
+  - deny
+  - bye
+  - thanks
+  - chitchat:
+      use_entities: []
+  - staff_inform:
+      use_entities: []
+
+entities:
+  - e_name
+  - e_name_title
+  - e_order
+  - e_department
+  - e_phone_number
+  - e_four_digits
+
+slots:
+  self_name:
+    type: unfeaturized
+    auto_fill: false
+  staff_name_error_count:
+    type: float
+    min_value: 0
+    max_value: 3
+    initial_value: 0
+  digits_key:
+    type: unfeaturized
+    auto_fill: false
+  digits_key_error_count:
+    type: float
+    min_value: 0
+    max_value: 3
+    initial_value: 0
+  requested_slot:
+    type: unfeaturized
+
+responses:
+  utter_greet:
+    - text: "您好！人脸认证失败，语音助手为您服务，请问您是本公司员工吗？"
+  utter_ask_self_name:
+    - text: "请问您叫什么名字？"
+  utter_ask_digits_key:
+    - text: "请说一下您设置的四位数密码。"
+  utter_submit:
+    - text: "{self_name}, 欢迎您，工作愉快！"
+  utter_wrong_self_name:
+    - text: "数据库中没有找到名字为-{self_name}的员工，请您再次尝试。"
+  utter_wrong_digits_key:
+    - text: "{digits_key}数字密码与{self_name}设置的不符，请您再次尝试。"
+  utter_manual_service:
+    - text: "尝试超过上限，已经为您联系前台，请稍候！"
+  utter_noworries:
+    - text: "不用谢，再会！"
+  utter_chitchat:
+    - text: "请不要跟我扯淡，请回答我能理解东西，谢谢！"
+
+forms:
+  - staff_form
+
+session_config:
+  session_expiration_time: 60  # value in minutes
+  carry_over_slots_to_new_session: true

@@ -1,0 +1,8 @@
+language: zh
+
+policies:
+#  - name: FallbackPolicy
+#  - name: MemoizationPolicy
+#  - name: FormPolicy
+#  - name: MappingPolicy
+  - name: FormPolicy
