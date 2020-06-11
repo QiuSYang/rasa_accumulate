@@ -1,14 +1,18 @@
 """
 # staff 正确回答agent问题进门
 """
+import logging
 from typing import Dict, Text, Any, List, Union, Optional
 
 from rasa_sdk import Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.forms import FormAction
+from rasa_sdk.forms import FormAction, REQUESTED_SLOT
 
 from pypinyin import lazy_pinyin
 from tool.load_database import LoadDB
+from rasa_sdk.events import SlotSet, Form, EventType
+
+logger = logging.getLogger(__name__)
 
 
 class StaffForm(FormAction):
@@ -56,6 +60,41 @@ class StaffForm(FormAction):
 
         return []
 
+    # noinspection PyUnusedLocal
+    def request_next_slot(
+            self,
+            dispatcher: "CollectingDispatcher",
+            tracker: "Tracker",
+            domain: Dict[Text, Any],
+    ) -> Optional[List[EventType]]:
+        """Request the next slot and utter template if needed,
+            else return None"""
+
+        for slot in self.required_slots(tracker):
+            if self._should_request_slot(tracker, slot):
+                print("digits_key_error_count: {}".format(tracker.get_slot("digits_key_error_count")))
+                # Condition of validated slot that triggers deactivation
+                if tracker.get_slot("staff_name_error_count") > 1:
+                    # 人工服务（呼叫前台）
+                    dispatcher.utter_message(template="utter_manual_service")
+
+                    # 中断 form action 的执行
+                    return self.deactivate()
+                elif tracker.get_slot("digits_key_error_count") > 1:
+                    # 人工服务（呼叫前台）
+                    dispatcher.utter_message(template="utter_manual_service")
+
+                    # 中断 form action 的执行
+                    return self.deactivate()
+
+                # For all other slots, continue as usual
+                logger.debug(f"Request next slot '{slot}'")
+                dispatcher.utter_message(template=f"utter_ask_{slot}", **tracker.slots)
+                return [SlotSet(REQUESTED_SLOT, slot)]
+
+        # no more required slots to fill
+        return None
+
     # USED FOR DOCS: do not rename without updating in docs
     def validate_self_name(
             self,
@@ -76,12 +115,11 @@ class StaffForm(FormAction):
                 return {"self_name": None,
                         "staff_name_error_count": tracker.get_slot("staff_name_error_count") + 1}
             else:
-                # 呼叫前台
-                dispatcher.utter_message(template="utter_manual_service")
+                # # 呼叫前台
+                # dispatcher.utter_message(template="utter_manual_service")
 
-                # 中断form
-                print("中断 form loop")
-                return self.deactivate()
+                return {"self_name": None,
+                        "staff_name_error_count": tracker.get_slot("staff_name_error_count") + 1}
 
     def validate_digits_key(
             self,
@@ -102,12 +140,11 @@ class StaffForm(FormAction):
                 return {"digits_key": None,
                         "digits_key_error_count": tracker.get_slot("digits_key_error_count") + 1}
             else:
-                # 呼叫前台
-                dispatcher.utter_message(template="utter_manual_service")
+                # # 呼叫前台
+                # dispatcher.utter_message(template="utter_manual_service")
 
-                # 中断form
-                print("中断 form loop")
-                return self.deactivate()
+                return {"digits_key": None,
+                        "digits_key_error_count": tracker.get_slot("digits_key_error_count") + 1}
 
     def match_staff_name(self, staff_name):
         """匹配员工姓名"""

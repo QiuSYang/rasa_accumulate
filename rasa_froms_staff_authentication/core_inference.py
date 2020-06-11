@@ -65,9 +65,10 @@ def get_nlu_result(input_content):
 
 
 if __name__ == "__main__":
-    text = "我是杨球松"
-    output_parse_info = get_nlu_result(text)
+    # text = "我是杨球松"
+    # output_parse_info = get_nlu_result(text)
     # 模型文件的解压路径
+    # core_model_path = 'models/core-20200610-174826.tar.gz'
     core_model_path = 'models/core-20200610-160751.tar.gz'
     action_endpoint = EndpointConfig(url="http://localhost:5055/webhook")
     agent = HciAgent.load(core_model_path, action_endpoint=action_endpoint) 
