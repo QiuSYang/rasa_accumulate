@@ -65,7 +65,8 @@ class DataConverters(object):
                                 # # 一旦data_str出现过new_entity_name模式就不在替换，
                                 # # 但是经常会出现new_entity_name模式匹配不出来，所以改用list的形式
                                 # temp_list.append(new_entity_name)
-                                # 实体名更新，每一行可能存在多个实体名
+
+                                # 实体名更新，每一行可能存在多个实体名(前一个实体提取完成，进入下一个实体提取)
                                 flag = single_label[2:]
                                 single_entity_name = data_lines[i]
                                 # temp list 置空, 下一个实体开始
@@ -78,6 +79,7 @@ class DataConverters(object):
                                 single_entity_name = data_lines[i]
                                 temp_list.append(i)
 
+                # 每行的最后一个实体提取
                 if flag is not None:
                     # 每一行最后一个实体加入每一行中
                     # 对原始数据进行制作为rasa nlu识别的格式
