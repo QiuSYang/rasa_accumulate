@@ -7,4 +7,4 @@ rasa nlu study accumulation.
     
 参考链接：
     
-    1. https://github.com/GaoQ1/rasa_nlu_gq
+    1. components模块的参考链接：https://github.com/GaoQ1/rasa_nlu_gq

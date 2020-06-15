@@ -9,6 +9,7 @@ from rasa.nlu.model import Metadata
 from rasa.nlu.training_data import Message
 
 import os
+import datetime
 import shutil
 import kashgari
 from kashgari.embeddings import BERTEmbedding
@@ -26,6 +27,7 @@ class CustomIntentClassifier(Component):
     defaults = {
         "bert_model_path": None,
         "sequence_length": "auto",
+        "intent_ranking_length": 10,
         "layer_nums": 4,
         "trainable": False,
         "classifier_model": "BiLSTM_Model",
@@ -111,8 +113,9 @@ class CustomIntentClassifier(Component):
             factor=factor,
             patience=patience,
             verbose=verbose)
+        log_dir = "logs/plugins/profile/{}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
         tensor_board = TensorBoard(
-            log_dir='./logs',
+            log_dir=log_dir,
             histogram_freq=1,
             batch_size=32,
             write_graph=True,
