@@ -36,7 +36,7 @@ class DataConverters(object):
             for index in range(len(source_file_contents)):
                 data_lines = source_file_contents[index].strip().split(' ')
                 label_lines = source_label_contents[index].strip().split(' ')
-                if index == 250:
+                if index == 4466:
                     print(index)
                 flag = None
                 single_entity_name = str()
@@ -82,6 +82,8 @@ class DataConverters(object):
                 # 每行的最后一个实体提取
                 if flag is not None:
                     # 每一行最后一个实体加入每一行中
+                    # 每行最后一个实体索引列表加入行列表(因为类别实体可能是几个tokenize组成)
+                    entity_id_list.append(temp_list)
                     # 对原始数据进行制作为rasa nlu识别的格式
                     new_entity_name = "[{}]({})".format(single_entity_name, flag)
                     data_lines[temp_list[0]] = new_entity_name
@@ -102,7 +104,7 @@ class DataConverters(object):
                 data_valid_contents = [data_lines[i] for i in range(len(data_lines)) if i not in del_indexes]
 
                 data_str = "".join(data_valid_contents)
-                fw_nlu.write("{}\n".format(data_str))
+                fw_nlu.write("- {}\n".format(data_str))
 
 
 if __name__ == "__main__":
