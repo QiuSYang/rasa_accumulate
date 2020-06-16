@@ -9,6 +9,7 @@ from rasa.nlu.model import Metadata
 from rasa.nlu.training_data import Message
 
 import os
+import math
 import datetime
 import shutil
 import kashgari
@@ -45,23 +46,25 @@ class CustomEntityExtractor(EntityExtractor):
                  model=None):
         super(CustomEntityExtractor, self).__init__(component_config)
 
-        bert_model_path = self.component_config.get('bert_model_path')
-        sequence_length = self.component_config.get('sequence_length')
-        layer_nums = self.component_config.get('layer_nums')
-        trainable = self.component_config.get('trainable')
-        use_cudnn_cell = self.component_config.get('use_cudnn_cell')
+        self.bert_model_path = self.component_config.get('bert_model_path')
+        self.sequence_length = self.component_config.get('sequence_length')
+        self.layer_nums = self.component_config.get('layer_nums')
+        self.trainable = self.component_config.get('trainable')
+        self.use_cudnn_cell = self.component_config.get('use_cudnn_cell')
+
 
         # 设置是否使用cudnn进行加速训练，True为加速训练，false反之
         # 训练使用cudnn加速，那么inference也只能使用cudnn加速
-        kashgari.config.use_cudnn_cell = use_cudnn_cell
+        kashgari.config.use_cudnn_cell = self.use_cudnn_cell
 
         self.labeling_model = self.component_config.get('labeling_model')
 
-        self.bert_embedding = BERTEmbedding(bert_model_path,
-                                            task=kashgari.LABELING,
-                                            layer_nums=layer_nums,
-                                            trainable=trainable,
-                                            sequence_length=sequence_length)
+        # self.bert_embedding = BERTEmbedding(self.bert_model_path,
+        #                                     task=kashgari.LABELING,
+        #                                     layer_nums=self.layer_nums,
+        #                                     trainable=self.trainable,
+        #                                     sequence_length=self.sequence_length)
+        self.bert_embedding = None
 
         self.model = model
 
@@ -86,6 +89,15 @@ class CustomEntityExtractor(EntityExtractor):
         # 训练数据与验证数据分离
         train_x, validate_x, train_y, validate_y = train_test_split(X, Y, test_size=validation_split, random_state=100)
 
+        # 128作为序列的基数
+        sequence_length_base = self.component_config.get('sequence_length')
+        self.sequence_length = math.ceil(self.sequence_length/sequence_length_base) * sequence_length_base
+
+        self.bert_embedding = BERTEmbedding(self.bert_model_path,
+                                            task=kashgari.LABELING,
+                                            layer_nums=self.layer_nums,
+                                            trainable=self.trainable,
+                                            sequence_length=self.sequence_length)
         # load 模型结构
         self.model = labeling_model(self.bert_embedding)
 
@@ -105,18 +117,12 @@ class CustomEntityExtractor(EntityExtractor):
             patience=patience,
             verbose=verbose)
         log_dir = "logs/plugins/profile/{}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+        if os.path.exists(log_dir):
+            # 路径已经存在删除路径
+            shutil.rmtree(log_dir)
         tensor_board = TensorBoard(
             log_dir=log_dir,
-            histogram_freq=1,
-            batch_size=32,
-            write_graph=True,
-            write_grads=False,
-            write_images=True,
-            embeddings_freq=0,
-            embeddings_layer_names=None,
-            embeddings_metadata=None,
-            embeddings_data=None,
-            update_freq=500)
+            batch_size=batch_size)
 
         # 训练模型
         self.model.fit(
@@ -147,6 +153,7 @@ class CustomEntityExtractor(EntityExtractor):
     def _predata(self, text, entity_offsets):
         value = 'O'
         bilou = [value for _ in text]
+        text_list = list(text)
 
         for (start, end, entity) in entity_offsets:
             if start is not None and end is not None:
@@ -154,7 +161,16 @@ class CustomEntityExtractor(EntityExtractor):
                 for i in range(start + 1, end):
                     bilou[i] = 'I-' + entity
 
-        return list(text), bilou
+        # # 数据截断
+        # if len(bilou) > self.component_config.get('sequence_length'):
+        #     bilou = bilou[:self.component_config.get('sequence_length')]
+        #     text_list = text_list[:self.component_config.get('sequence_length')]
+
+        # 计算数据集的最大长度
+        if len(bilou) > self.sequence_length:
+            self.sequence_length = len(bilou)
+
+        return text_list, bilou
 
     def process(self, message, **kwargs):
         """结果预测"""
@@ -166,7 +182,12 @@ class CustomEntityExtractor(EntityExtractor):
 
     def extract_entities(self, message):
         if self.model is not None:
-            entities, result = self.model.predict_entities([list(message.text)], join_chunk=''), []
+            text_list = list(message.text)
+            # # 数据过长直接截断部分
+            # if len(text_list) > self.component_config.get('sequence_length'):
+            #     text_list = text_list[:self.component_config.get('sequence_length')]
+
+            entities, result = self.model.predict_entities([text_list], join_chunk=''), []
 
             for item in entities[0]['labels']:
                 result.append({

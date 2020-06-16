@@ -41,7 +41,7 @@ class RasaInference(object):
 
 
 if __name__ == "__main__":
-    model_path = "models/20200611/model"
+    model_path = "models/rasa_train/20200615"
     pt = RasaInference(model_path=model_path)
 
     loop = asyncio.get_event_loop()

@@ -1,13 +1,15 @@
 language: "zh"
 
 pipeline:
-#  - name: "nlu_components.custom_intent_classifier.CustomIntentClassifier"
-#    bert_model_path: "models/chinese_wwm_ext_L-12_H-768_A-12"
-#    use_cudnn_cell: True
-#    sequence_length: 256
-#    intent_ranking_length: 2
+  - name: "nlu_components.custom_intent_classifier.CustomIntentClassifier"
+    bert_model_path: "models/chinese_wwm_ext_L-12_H-768_A-12"
+    use_cudnn_cell: True
+    sequence_length: 256
+    epochs: 1
+    intent_ranking_length: 2
 
   - name: "nlu_components.custom_entity_extractor.CustomEntityExtractor"
     bert_model_path: "models/chinese_wwm_ext_L-12_H-768_A-12"
     use_cudnn_cell: True
-    sequence_length: 768
+    sequence_length: 128
+    batch_size: 32

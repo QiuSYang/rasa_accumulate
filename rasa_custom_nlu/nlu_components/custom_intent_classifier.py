@@ -114,18 +114,12 @@ class CustomIntentClassifier(Component):
             patience=patience,
             verbose=verbose)
         log_dir = "logs/plugins/profile/{}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+        if os.path.exists(log_dir):
+            # 路径已经存在删除路径
+            shutil.rmtree(log_dir)
         tensor_board = TensorBoard(
             log_dir=log_dir,
-            histogram_freq=1,
-            batch_size=32,
-            write_graph=True,
-            write_grads=False,
-            write_images=True,
-            embeddings_freq=0,
-            embeddings_layer_names=None,
-            embeddings_metadata=None,
-            embeddings_data=None,
-            update_freq=500)
+            batch_size=batch_size)
 
         self.model.fit(
             train_x,
